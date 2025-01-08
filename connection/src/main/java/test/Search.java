@@ -1,27 +1,19 @@
-import test.Signin;
+package test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Scanner;
+import lombok.Getter;
+import lombok.Setter;
 
-public class DatabaseConnection {
+import java.sql.*;
 
-    // estabelecendo conexão
+public class Search {
     private static final String URL = "jdbc:postgresql://localhost:5432/validusers";
     private static final String USER = "postgres";
     private static final String PASSWORD = "admin";
-
     public static void main(String[] args) {
-
-        //sign-in
-        Signin signin = new Signin("btn", "1234");
 
         // Conectar ao banco de dados
         try (Connection conexao = DriverManager.getConnection(URL, USER, PASSWORD)) {
-            System.out.println("Conexão com PostgreSQL estabelecida com sucesso!");
+            System.out.println("Connection to PostgreSQL established successfully!");
 
             // Executar consulta
             String sql = "SELECT * from users order by id asc ";
@@ -35,25 +27,17 @@ public class DatabaseConnection {
                     String username = rs.getString("username");
                     String password = rs.getString("password");
 
-//                    System.out.printf("ID: %d, Username: %s, Password: %s", id, username, password);
+                    System.out.printf("ID: %d, Username: %s, Password: %s", id, username, password);
                     System.out.println();
 
-                    if(username.equals(signin.getUsername()) && password.equals(signin.getPassword())){
-                        System.out.println("sign-in sucess!");
-                    }else{
-                        System.out.println("user not found!");
-                    }
                 }
 
-
             } catch (SQLException e) {
-                System.err.println("Erro ao executar a consulta: " + e.getMessage());
+                System.err.println("Error executing the query: " + e.getMessage());
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
+            System.err.println("Error connecting to database: " + e.getMessage());
         }
-
-
     }
 }
