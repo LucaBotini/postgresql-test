@@ -1,8 +1,11 @@
+import test.Signin;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 public class DatabaseConnection {
 
@@ -12,6 +15,10 @@ public class DatabaseConnection {
     private static final String PASSWORD = "admin";
 
     public static void main(String[] args) {
+
+        //sign-in
+        Signin signin = new Signin("btn", "1234");
+
         // Conectar ao banco de dados
         try (Connection conexao = DriverManager.getConnection(URL, USER, PASSWORD)) {
             System.out.println("Conexão com PostgreSQL estabelecida com sucesso!");
@@ -28,13 +35,14 @@ public class DatabaseConnection {
                     String username = rs.getString("username");
                     String password = rs.getString("password");
 
-                    System.out.printf("ID: %d, Username: %s, Password: %s", id, username, password);
-                    if(id == 3){
-                        System.out.println("encontrei id 3");
-                    }if(id == 7){
-                        System.out.println("encontrei id 7");
-                    }
+//                    System.out.printf("ID: %d, Username: %s, Password: %s", id, username, password);
+                    System.out.println();
 
+                    if(username.equals(signin.getUsername()) && password.equals(signin.getPassword())){
+                        System.out.println("sign-in sucess!");
+                    }else{
+                        System.out.println("user not found!");
+                    }
                 }
 
 
@@ -45,5 +53,7 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
         }
+
+
     }
 }
